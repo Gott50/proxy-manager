@@ -1,5 +1,6 @@
 from flask import Flask
 from flask import request
+from AWSProxy import AWSProxy
 
 app = Flask(__name__)
 
@@ -7,9 +8,9 @@ app = Flask(__name__)
 @app.route('/', methods=['GET'])
 def get_root():
     try:
-        args = request.args
-
-        return str(args), 200
+        user = request.args.get("user")
+        proxy = AWSProxy.get(user)
+        return proxy, 200
     except Exception as exc:
         # 500 Internal Server Error
         return str(exc), 500
