@@ -1,6 +1,6 @@
 from flask import Flask
 from flask import request
-import AWSProxy
+from AWSProxy import AWSProxy
 
 app = Flask(__name__)
 
