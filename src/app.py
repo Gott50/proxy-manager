@@ -3,13 +3,14 @@ from flask import request
 from AWSProxy import AWSProxy
 
 app = Flask(__name__)
+aws_proxy = AWSProxy()
 
 
 @app.route('/', methods=['GET'])
 def get_root():
     try:
         user = request.args.get("user")
-        proxy = AWSProxy.get(user)
+        proxy = aws_proxy.get(user)
         return proxy, 200
     except Exception as exc:
         # 500 Internal Server Error
