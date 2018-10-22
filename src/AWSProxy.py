@@ -13,7 +13,14 @@ class AWSProxy:
         return proxy
 
     def create_proxy(self):
-        return "1.2.3.4:8888"
+        existing_proxy = self.start_proxy()
+        if existing_proxy:
+            return existing_proxy
+        else:
+            return "1.2.3.4:8888"
 
     def stop_proxies(self):
         pass
+
+    def start_proxy(self):
+        return None
