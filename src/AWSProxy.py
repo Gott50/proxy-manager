@@ -1,4 +1,3 @@
-
 class AWSProxy:
     def __init__(self):
         self.user_proxy_dic = {}
@@ -19,11 +18,11 @@ class AWSProxy:
         else:
             return self.create_new_proxy()
 
-    def create_new_proxy(self):
+    def create_new_proxy(self):  # TODO implement
         return "1.2.3.4:8888"
 
-    def stop_proxies(self):
+    def stop_proxies(self):  # TODO implement
         pass
 
-    def start_proxy(self):
+    def start_proxy(self):  # TODO implement
         return None
