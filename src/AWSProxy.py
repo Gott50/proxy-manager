@@ -14,7 +14,7 @@ class AWSProxy:
 
         proxy = self.create_new_proxy()
         self.user_proxy_dic[user] = proxy
-        return proxy
+        return '%s:%s' % (proxy.public_ip_address, 8888)
 
     def create_new_proxy(self):
         instance = self.ec2.create_instances(
@@ -27,7 +27,7 @@ class AWSProxy:
             sleep(1)
             instance = self.ec2.Instance(instance.id)
 
-        return '%s:%s' % (instance.public_ip_address, 8888)
+        return instance
 
     def stop_proxies(self):  # TODO implement
         pass
