@@ -32,5 +32,8 @@ class AWSProxy:
     def stop_proxies(self):  # TODO implement
         pass
 
-    def start_proxy(self):  # TODO implement
-        return None
+    def stop(self, user):
+        self.stop_proxy(self.user_proxy_dic.pop(user))
+
+    def stop_proxy(self, proxy):  # TODO implement
+        pass
