@@ -27,6 +27,9 @@ class AWSProxy:
             sleep(1)
             instance = self.ec2.Instance(instance.id)
 
+        while not self.check_proxy(instance):
+            sleep(1)
+
         return instance
 
     def stop_proxies(self):
