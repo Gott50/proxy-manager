@@ -1,3 +1,5 @@
+import requests
+
 import boto3
 from time import sleep
 
@@ -27,10 +29,18 @@ class AWSProxy:
             sleep(1)
             instance = self.ec2.Instance(instance.id)
 
-        while not self.check_proxy(instance):
+        while not self.check_proxy(instance.public_ip_address):
             sleep(1)
 
         return instance
+
+    def check_proxy(self, proxy):
+        try:
+            requests.get('http://example.com', proxies={'http': proxy})
+        except IOError:
+            return False
+        else:
+            return True
 
     def stop_proxies(self):
         for proxy in self.get_proxies():
