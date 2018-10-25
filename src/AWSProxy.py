@@ -29,8 +29,12 @@ class AWSProxy:
 
         return instance
 
-    def stop_proxies(self):  # TODO implement
-        pass
+    def stop_proxies(self):
+        for proxy in self.get_proxies():
+            self.stop(proxy)
+
+    def get_proxies(self):  # TODO implement
+        return []
 
     def stop(self, user):
         self.stop_proxy(self.user_proxy_dic.pop(user))
