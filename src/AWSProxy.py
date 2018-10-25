@@ -12,16 +12,9 @@ class AWSProxy:
         if user in self.user_proxy_dic:
             return self.user_proxy_dic[user]
 
-        proxy = self.create_proxy()
+        proxy = self.create_new_proxy()
         self.user_proxy_dic[user] = proxy
         return proxy
-
-    def create_proxy(self):
-        existing_proxy = self.start_proxy()
-        if existing_proxy:
-            return existing_proxy
-        else:
-            return self.create_new_proxy()
 
     def create_new_proxy(self):
         instance = self.ec2.create_instances(
