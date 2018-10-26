@@ -24,6 +24,7 @@ RUN apk add --no-cache --virtual .build-deps \
     && apk del .build-deps
 
 COPY ./src .
+COPY ./.aws /root/.aws
 
 EXPOSE 6000
-/usr/local/bin/gunicorn -b :6000 app:app
+CMD /usr/local/bin/gunicorn -b :6000 app:app
