@@ -45,7 +45,7 @@ class AWSProxy:
 
     def stop_proxies(self):
         for proxy in self.get_proxies():
-            self.stop(proxy)
+            self.stop_proxy(proxy)
 
     def get_proxies(self):
         response = self.client.describe_instances(Filters=[
@@ -56,7 +56,7 @@ class AWSProxy:
                 ]
             },
         ], )
-        ids = list(map(lambda i: i['Instances'][0]['ImageId'], response['Reservations']))
+        ids = list(map(lambda i: i['Instances'][0]['InstanceId'], response['Reservations']))
         return list(map(lambda i: self.ec2.Instance(i), ids))
 
 
