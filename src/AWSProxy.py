@@ -7,8 +7,9 @@ from time import sleep
 class AWSProxy:
     def __init__(self):
         self.user_proxy_dic = {}
-        self.stop_proxies()
         self.ec2 = boto3.resource('ec2')
+        self.client = boto3.client('ec2')
+        self.stop_proxies()
 
     def get(self, user):
         if user in self.user_proxy_dic:
@@ -46,8 +47,18 @@ class AWSProxy:
         for proxy in self.get_proxies():
             self.stop(proxy)
 
-    def get_proxies(self):  # TODO implement
-        return []
+    def get_proxies(self):
+        response = self.client.describe_instances(Filters=[
+            {
+                'Name': 'image-id',
+                'Values': [
+                    'ami-02ae436ce7c43df2b',
+                ]
+            },
+        ], )
+        ids = list(map(lambda i: i['Instances'][0]['ImageId'], response['Reservations']))
+        return list(map(lambda i: self.ec2.Instance(i), ids))
+
 
     def stop(self, user):
         self.stop_proxy(self.user_proxy_dic.pop(user))
