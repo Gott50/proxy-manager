@@ -5,6 +5,7 @@ chardet==3.0.4
 Click==7.0
 docutils==0.14
 Flask==1.0.2
+gunicorn==19.9.0
 idna==2.7
 itsdangerous==0.24
 Jinja2==2.10
