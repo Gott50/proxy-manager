@@ -1,9 +1,11 @@
-import requests
-
-import boto3
 from time import sleep
 
+import boto3
+import requests
+
+IMAGE_ID = 'ami-02ae436ce7c43df2b'
 PORT = 8888
+
 
 class AWSProxy:
     def __init__(self):
@@ -23,7 +25,7 @@ class AWSProxy:
 
     def create_new_proxy(self, user):
         instance = self.ec2.create_instances(
-            ImageId='ami-02ae436ce7c43df2b', InstanceType='t2.micro',
+            ImageId=IMAGE_ID, InstanceType='t2.micro',
             KeyName='proxy', SecurityGroups=['proxy'],
             MaxCount=1, MinCount=1
         )[0]
@@ -55,13 +57,12 @@ class AWSProxy:
             {
                 'Name': 'image-id',
                 'Values': [
-                    'ami-02ae436ce7c43df2b',
+                    IMAGE_ID,
                 ]
             },
         ], )
         ids = list(map(lambda i: i['Instances'][0]['InstanceId'], response['Reservations']))
         return list(map(lambda i: self.ec2.Instance(i), ids))
-
 
     def stop(self, user):
         return self.stop_proxy(self.user_proxy_dic.pop(user))
