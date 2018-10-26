@@ -11,3 +11,5 @@ services:
       - FLASK_ENV=development
       - FLASK_APP=server
       - DEBUG=True
+    env_file:
+    - .env/.proxy-manager.env
