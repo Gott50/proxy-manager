@@ -10,6 +10,7 @@ aws_proxy = AWSProxy()
 def get_root():
     try:
         user = request.args.get("user")
+        print('create Proxy for: %s' % user)
         proxy = aws_proxy.get(user)
         return proxy, 200
     except Exception as exc:
