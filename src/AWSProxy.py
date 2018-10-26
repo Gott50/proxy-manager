@@ -48,7 +48,7 @@ class AWSProxy:
 
     def stop_proxies(self):
         for proxy in self.get_proxies():
-            self.stop_proxy(proxy)
+            print(self.stop_proxy(proxy))
 
     def get_proxies(self):
         response = self.client.describe_instances(Filters=[
