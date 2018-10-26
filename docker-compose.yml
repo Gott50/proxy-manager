@@ -1,0 +1,13 @@
+version: '3'
+services:
+  proxy-manager:
+    build: .
+    image: gott50/proxy-manager
+    ports:
+      - "6000:6000"
+    volumes:
+      - ./src:/app
+    environment:
+      - FLASK_ENV=development
+      - FLASK_APP=server
+      - DEBUG=True
