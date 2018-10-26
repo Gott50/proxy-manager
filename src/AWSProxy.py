@@ -1,3 +1,4 @@
+import os
 from time import sleep
 
 import boto3
@@ -10,8 +11,10 @@ PORT = 8888
 class AWSProxy:
     def __init__(self):
         self.user_proxy_dic = {}
-        self.ec2 = boto3.resource('ec2')
-        self.client = boto3.client('ec2')
+        self.ec2 = boto3.resource('ec2', aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),
+                                  aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY'))
+        self.client = boto3.client('ec2', aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),
+                                   aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY'))
         self.stop_proxies()
 
     def get(self, user):
