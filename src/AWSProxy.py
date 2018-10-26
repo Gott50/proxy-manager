@@ -37,7 +37,7 @@ class AWSProxy:
 
     def check_proxy(self, proxy):
         try:
-            requests.get('http://example.com', proxies={'http': proxy})
+            requests.get('http://example.com', proxies={'http': '%s:8888' % proxy})
         except IOError:
             return False
         else:
