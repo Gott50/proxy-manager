@@ -13,13 +13,14 @@ class AWSProxy:
 
     def get(self, user):
         if user in self.user_proxy_dic:
-            return self.user_proxy_dic[user]
+            while not self.check_proxy(self.user_proxy_dic[user].public_ip_address):
+                sleep(1)
+            return '%s:%s' % (self.user_proxy_dic[user].public_ip_address, 8888)
 
-        proxy = self.create_new_proxy()
-        self.user_proxy_dic[user] = proxy
+        proxy = self.create_new_proxy(user)
         return '%s:%s' % (proxy.public_ip_address, 8888)
 
-    def create_new_proxy(self):
+    def create_new_proxy(self, user):
         instance = self.ec2.create_instances(
             ImageId='ami-02ae436ce7c43df2b', InstanceType='t2.micro',
             KeyName='proxy', SecurityGroups=['proxy'],
@@ -29,6 +30,7 @@ class AWSProxy:
         while not instance.public_ip_address:
             sleep(1)
             instance = self.ec2.Instance(instance.id)
+        self.user_proxy_dic[user] = instance
 
         while not self.check_proxy(instance.public_ip_address):
             sleep(1)
@@ -37,7 +39,7 @@ class AWSProxy:
 
     def check_proxy(self, proxy):
         try:
-            requests.get('http://example.com', proxies={'http': '%s:8888' % proxy})
+            requests.get('http://example.com', proxies={'http': '%s:%s' % (proxy, 8888)})
         except IOError:
             return False
         else:
