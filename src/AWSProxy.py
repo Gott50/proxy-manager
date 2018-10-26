@@ -61,7 +61,7 @@ class AWSProxy:
 
 
     def stop(self, user):
-        self.stop_proxy(self.user_proxy_dic.pop(user))
+        return self.stop_proxy(self.user_proxy_dic.pop(user))
 
     def stop_proxy(self, proxy):
-        print(proxy.terminate())
+        return proxy.terminate()

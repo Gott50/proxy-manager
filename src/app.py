@@ -21,8 +21,8 @@ def get_root():
 def get_stop():
     try:
         user = request.args.get("user")
-        aws_proxy.stop(user)
-        return 200
+        response = aws_proxy.stop(user)
+        return response, 200
     except Exception as exc:
         # 500 Internal Server Error
         return str(exc), 500
