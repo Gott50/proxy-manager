@@ -3,6 +3,7 @@ import requests
 import boto3
 from time import sleep
 
+PORT = 8888
 
 class AWSProxy:
     def __init__(self):
@@ -15,10 +16,10 @@ class AWSProxy:
         if user in self.user_proxy_dic:
             while not self.check_proxy(self.user_proxy_dic[user].public_ip_address):
                 sleep(1)
-            return '%s:%s' % (self.user_proxy_dic[user].public_ip_address, 8888)
+            return '%s:%s' % (self.user_proxy_dic[user].public_ip_address, PORT)
 
         proxy = self.create_new_proxy(user)
-        return '%s:%s' % (proxy.public_ip_address, 8888)
+        return '%s:%s' % (proxy.public_ip_address, PORT)
 
     def create_new_proxy(self, user):
         instance = self.ec2.create_instances(
@@ -39,7 +40,7 @@ class AWSProxy:
 
     def check_proxy(self, proxy):
         try:
-            requests.get('http://example.com', proxies={'http': '%s:%s' % (proxy, 8888)})
+            requests.get('http://example.com', proxies={'http': '%s:%s' % (proxy, PORT)})
         except IOError:
             return False
         else:
