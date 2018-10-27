@@ -1,8 +1,9 @@
+import boto3
 import os
+import requests
 from time import sleep
 
-import boto3
-import requests
+import db
 
 IMAGE_ID = 'ami-02ae436ce7c43df2b'
 PORT = 8888
@@ -11,17 +12,17 @@ PORT = 8888
 class AWSProxy:
     def __init__(self, logger):
         self.logger = logger
-        self.user_proxy_dic = {}
         self.ec2 = boto3.resource('ec2', aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),
                                   aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY'))
         self.client = boto3.client('ec2', aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),
                                    aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY'))
 
     def get(self, user):
-        if user in self.user_proxy_dic:
-            while not self.check_proxy(self.user_proxy_dic[user].public_ip_address):
+        self.logger.info(db.get_user(user))
+        if db.get_user(user):
+            while not self.check_proxy(db.get_proxy(user)):
                 sleep(1)
-            return '%s:%s' % (self.user_proxy_dic[user].public_ip_address, PORT)
+            return '%s:%s' % (db.get_proxy(user), PORT)
 
         proxy = self.create_new_proxy(user)
         return '%s:%s' % (proxy.public_ip_address, PORT)
@@ -36,7 +37,7 @@ class AWSProxy:
         while not instance.public_ip_address:
             sleep(1)
             instance = self.ec2.Instance(instance.id)
-        self.user_proxy_dic[user] = instance
+        db.add_user(name=user, proxy=instance.public_ip_address, instance=instance.id)
 
         while not self.check_proxy(instance.public_ip_address):
             sleep(1)
@@ -68,7 +69,10 @@ class AWSProxy:
         return list(map(lambda i: self.ec2.Instance(i), ids))
 
     def stop(self, user):
-        return self.stop_proxy(self.user_proxy_dic.pop(user))
+        instance = self.ec2.Instance(db.get_user(user).instance)
+        db.delete(user)
+
+        return instance
 
     def stop_proxy(self, proxy):
         return proxy.terminate()
