@@ -73,7 +73,7 @@ class AWSProxy:
         instance = self.ec2.Instance(self.db.get_user(user).instance)
         self.db.delete(user)
 
-        return instance
+        return self.stop_proxy(instance)
 
     def stop_proxy(self, proxy):
         return proxy.terminate()
