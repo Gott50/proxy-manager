@@ -18,7 +18,7 @@ class AWSProxy:
                                    aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY'))
 
     def get(self, user):
-        self.logger.debug(self.db.get_user(user))
+        self.logger.debug("get_user(%s) return: %s" % (user, self.db.get_user(user)))
         if self.db.get_user(user):
             while not self.check_proxy(self.db.get_proxy(user)):
                 sleep(1)
@@ -70,10 +70,14 @@ class AWSProxy:
         return list(map(lambda i: self.ec2.Instance(i), ids))
 
     def stop(self, user):
-        instance = self.ec2.Instance(self.db.get_user(user).instance)
-        self.db.delete(user)
-
-        return self.stop_proxy(instance)
+        u = self.db.get_user(user)
+        self.logger.debug("get_user(%s) return: %s" % (user, u))
+        if u:
+            instance = self.ec2.Instance(u.instance)
+            self.db.delete(user)
+            return self.stop_proxy(instance)
+        else:
+            return "User was not running: %s" % user
 
     def stop_proxy(self, proxy):
         return proxy.terminate()
