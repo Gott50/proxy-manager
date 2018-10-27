@@ -1,8 +1,10 @@
 from flask import Flask
 from flask import request
 from AWSProxy import AWSProxy
+from config import BaseConfig
 
 app = Flask(__name__)
+app.config.from_object(BaseConfig)
 aws_proxy = AWSProxy(logger=app.logger)
 
 
