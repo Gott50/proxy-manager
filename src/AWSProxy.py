@@ -16,7 +16,6 @@ class AWSProxy:
                                   aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY'))
         self.client = boto3.client('ec2', aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),
                                    aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY'))
-        self.stop_proxies()
 
     def get(self, user):
         if user in self.user_proxy_dic:
@@ -54,7 +53,7 @@ class AWSProxy:
 
     def stop_proxies(self):
         for proxy in self.get_proxies():
-            self.logger.info(self.stop_proxy(proxy))
+            self.logger.warning(self.stop_proxy(proxy))
 
     def get_proxies(self):
         response = self.client.describe_instances(Filters=[
