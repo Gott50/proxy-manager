@@ -1,5 +1,7 @@
 from flask import Flask
 from flask import request
+from flask_sqlalchemy import SQLAlchemy
+
 from AWSProxy import AWSProxy
 from config import BaseConfig
 
