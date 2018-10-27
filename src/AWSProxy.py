@@ -9,7 +9,8 @@ PORT = 8888
 
 
 class AWSProxy:
-    def __init__(self):
+    def __init__(self, logger):
+        self.logger = logger
         self.user_proxy_dic = {}
         self.ec2 = boto3.resource('ec2', aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),
                                   aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY'))
@@ -53,7 +54,7 @@ class AWSProxy:
 
     def stop_proxies(self):
         for proxy in self.get_proxies():
-            print(self.stop_proxy(proxy))
+            self.logger.info(self.stop_proxy(proxy))
 
     def get_proxies(self):
         response = self.client.describe_instances(Filters=[

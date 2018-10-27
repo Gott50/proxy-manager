@@ -3,14 +3,14 @@ from flask import request
 from AWSProxy import AWSProxy
 
 app = Flask(__name__)
-aws_proxy = AWSProxy()
+aws_proxy = AWSProxy(logger=app.logger)
 
 
 @app.route('/', methods=['GET'])
 def get_root():
     try:
         user = request.args.get("user")
-        print('create Proxy for: %s' % user)
+        app.logger.info('create Proxy for: %s' % user)
         proxy = aws_proxy.get(user)
         return proxy, 200
     except Exception as exc:
