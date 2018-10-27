@@ -18,7 +18,7 @@ class AWSProxy:
                                    aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY'))
 
     def get(self, user):
-        self.logger.info(self.db.get_user(user))
+        self.logger.debug(self.db.get_user(user))
         if self.db.get_user(user):
             while not self.check_proxy(self.db.get_proxy(user)):
                 sleep(1)
@@ -46,6 +46,7 @@ class AWSProxy:
 
     def check_proxy(self, proxy):
         try:
+            self.logger.debug('check_proxy(%s)' % proxy)
             requests.get('http://example.com', proxies={'http': '%s:%s' % (proxy, PORT)})
         except IOError:
             return False
