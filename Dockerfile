@@ -26,5 +26,5 @@ RUN apk add --no-cache --virtual .build-deps \
 COPY ./src .
 COPY ./.aws /root/.aws
 
-EXPOSE 6000
-CMD /usr/local/bin/gunicorn -b :6000 app:app
+EXPOSE 5000
+CMD sh start.sh 5000
