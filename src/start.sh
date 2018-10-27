@@ -1,5 +1,5 @@
 #!/bin/sh
 
-python stop_proxies.py
+python setup.py
 
 /usr/local/bin/gunicorn -b :$1 app:app
