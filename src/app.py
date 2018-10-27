@@ -24,7 +24,7 @@ def get_root():
         return str(exc), 500
 
 
-@app.route('/stop', methods=['GET'])
+@app.route('/stop/', methods=['GET'])
 def get_stop():
     try:
         user = request.args.get("user")
