@@ -26,5 +26,5 @@ RUN apk add --no-cache --virtual .build-deps \
 COPY ./src .
 COPY ./.aws /root/.aws
 
-EXPOSE 5000
-CMD sh start.sh 5000
+EXPOSE 60000
+CMD sh start.sh 60000
