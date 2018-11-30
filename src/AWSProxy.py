@@ -45,13 +45,7 @@ class AWSProxy:
         return instance
 
     def check_proxy(self, proxy):
-        try:
-            self.logger.debug('check_proxy(%s)' % proxy)
-            requests.get('http://example.com', proxies={'http': '%s:%s' % (proxy, PORT)})
-        except IOError:
-            return False
-        else:
-            return True
+        return True
 
     def stop_proxies(self):
         for proxy in self.get_proxies():
