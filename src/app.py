@@ -17,7 +17,7 @@ def get_root(user):
     try:
         app.logger.warning('create Proxy for: %s' % user)
         proxy = aws_proxy.get(user)
-        app.logger.info('return %s, 200' % proxy)
+        app.logger.warning('return %s, 200' % proxy)
         return proxy, 200
     except Exception as exc:
         # 500 Internal Server Error
