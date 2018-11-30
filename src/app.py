@@ -21,6 +21,7 @@ def get_root(user):
         return proxy, 200
     except Exception as exc:
         # 500 Internal Server Error
+        app.logger.error('GET /%s Error: %s' % (user, exc))
         return str(exc), 500
 
 
@@ -34,6 +35,7 @@ def get_stop():
         return response, 200
     except Exception as exc:
         # 500 Internal Server Error
+        app.logger.error('GET /stop/%s Error: %s' % (user, exc))
         return str(exc), 500
 
 
