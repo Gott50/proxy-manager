@@ -100,3 +100,4 @@ ENV/
 docker-compose.override.yml
 
 .aws
+*.pem
