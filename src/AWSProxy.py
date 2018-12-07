@@ -32,7 +32,18 @@ class AWSProxy:
         instance = self.ec2.create_instances(
             ImageId=IMAGE_ID, InstanceType='t2.micro',
             KeyName='proxy', SecurityGroups=['proxy'],
-            MaxCount=1, MinCount=1
+            MaxCount=1, MinCount=1,
+            TagSpecifications=[
+                {
+                    'ResourceType': 'instance',
+                    'Tags': [
+                        {
+                            'Key': 'Name',
+                            'Value': user
+                        },
+                    ]
+                },
+            ],
         )[0]
 
         while not instance.public_ip_address:
