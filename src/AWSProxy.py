@@ -28,6 +28,17 @@ class AWSProxy:
         proxy = self.create_new_proxy(user)
         return '%s:%s' % (proxy.public_ip_address, PORT)
 
+    def restart(self, user):
+        get_user = self.db.get_user(user)
+        self.logger.debug("get_user(%s) return: %s" % (user, get_user))
+        if not get_user:
+            return self.get(user=user)
+
+        list1 = list(self.get_proxies())
+        user_proxies = list(filter(lambda p: p.public_ip_address == user.proxy, list1))
+        for proxy in user_proxies:
+            return self.restart_proxy(proxy)
+
     def create_new_proxy(self, user):
         instance = self.ec2.create_instances(
             ImageId=IMAGE_ID, InstanceType='t2.micro',
@@ -87,3 +98,8 @@ class AWSProxy:
 
     def stop_proxy(self, proxy):
         return proxy.terminate()
+
+    def restart_proxy(self, proxy):
+        return proxy.reboot()
+
+

@@ -25,6 +25,19 @@ def get_root(user):
         return str(exc), 500
 
 
+@app.route('/restart/<user>', methods=['GET'])
+def get_restart(user):
+    try:
+        app.logger.warning('restart Proxy for: %s' % user)
+        proxy = aws_proxy.restart(user)
+        app.logger.warning('return %s, 200' % proxy)
+        return proxy, 200
+    except Exception as exc:
+        # 500 Internal Server Error
+        app.logger.error('GET /restart/%s Error: %s' % (user, exc))
+        return str(exc), 500
+
+
 @app.route('/stop/', methods=['GET'])
 def get_stop():
     try:
