@@ -29,14 +29,12 @@ class AWSProxy:
         return '%s:%s' % (proxy.public_ip_address, PORT)
 
     def restart(self, user):
-        get_user = self.db.get_user(user)
-        self.logger.debug("get_user(%s) return: %s" % (user, get_user))
-        if not get_user:
+        proxy_list = self.get_proxy_list(user)
+        self.logger.debug("get_user(%s) return: %s" % (user, proxy_list))
+        if len(proxy_list) <= 0:
             return self.get(user=user)
 
-        list1 = list(self.get_proxies())
-        user_proxies = list(filter(lambda p: p.public_ip_address == user.proxy, list1))
-        for proxy in user_proxies:
+        for proxy in proxy_list:
             return self.restart_proxy(proxy)
 
     def create_new_proxy(self, user):
