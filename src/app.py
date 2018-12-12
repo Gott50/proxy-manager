@@ -1,13 +1,9 @@
 from flask import Flask
 from flask import request
-from flask_sqlalchemy import SQLAlchemy
 
 from AWSProxy import AWSProxy
-from config import BaseConfig
 
 app = Flask(__name__)
-app.config.from_object(BaseConfig)
-db = SQLAlchemy(app)
 
 aws_proxy = AWSProxy(logger=app.logger)
 
