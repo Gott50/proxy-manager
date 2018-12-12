@@ -91,14 +91,10 @@ class AWSProxy:
         return list(map(lambda i: self.ec2.Instance(i), ids))
 
     def stop(self, user):
-        u = self.db.get_user(user)
-        self.logger.debug("get_user(%s) return: %s" % (user, u))
-        if u:
-            instance = self.ec2.Instance(u.instance)
-            self.db.delete(user)
-            return self.stop_proxy(instance)
-        else:
-            return "User was not running: %s" % user
+        proxy_list = self.get_proxy_list(user)
+        self.logger.debug("get_user(%s) return: %s" % (user, proxy_list))
+        for instance in proxy_list:
+            self.stop_proxy(instance)
 
     def stop_proxy(self, proxy):
         return proxy.terminate()
