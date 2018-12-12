@@ -58,7 +58,6 @@ class AWSProxy:
         while not instance.public_ip_address:
             sleep(1)
             instance = self.ec2.Instance(instance.id)
-        self.db.add_user(name=user, proxy=instance.public_ip_address, instance=instance.id)
 
         while not self.check_proxy(instance.public_ip_address):
             sleep(1)
