@@ -18,13 +18,13 @@ class AWSProxy:
                                    aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY'))
 
     def get(self, user):
-        get_user = self.db.get_user(user)
-        self.logger.debug("get_user(%s) return: %s" % (user, get_user))
-        if get_user:
-            get_proxy = self.db.get_proxy(user)
-            while not self.check_proxy(get_proxy):
+        proxy_list = self.get_proxy_list(user)
+        self.logger.debug("get_proxy_list(%s) return: %s" % (user, proxy_list))
+        if len(proxy_list) > 0:
+            proxy = proxy_list[0].public_ip_address
+            while not self.check_proxy(proxy):
                 sleep(1)
-            return '%s:%s' % (get_proxy, PORT)
+            return '%s:%s' % (proxy, PORT)
 
         proxy = self.create_new_proxy(user)
         return '%s:%s' % (proxy.public_ip_address, PORT)
@@ -75,6 +75,12 @@ class AWSProxy:
         for proxy in self.get_proxies():
             self.logger.warning(self.stop_proxy(proxy))
 
+    def get_proxy_list(self, user):
+        d = {'Key': 'Name', 'Value': user}
+        return list(
+            filter(lambda i: (i.state['Name'] == 'pending' or i.state['Name'] == 'running') and d in i.tags,
+                   self.get_proxies()))
+
     def get_proxies(self):
         response = self.client.describe_instances(Filters=[
             {
@@ -102,5 +108,3 @@ class AWSProxy:
 
     def restart_proxy(self, proxy):
         return proxy.reboot()
-
-
