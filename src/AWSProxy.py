@@ -1,6 +1,5 @@
 import boto3
 import os
-import requests
 from time import sleep
 
 IMAGE_ID = 'ami-02ae436ce7c43df2b'
